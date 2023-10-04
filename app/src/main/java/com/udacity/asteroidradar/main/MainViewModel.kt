@@ -40,10 +40,10 @@ class MainViewModel(application: Application): AndroidViewModel(application) {
     private fun refreshAsteroids() {
         viewModelScope.launch {
             try {
-                repository.refreshAsteroids()
                 asteroids.addSource(weeklyAsteroids) {
                     asteroids.value = it
                 }
+                repository.refreshAsteroids()
             } catch (e: Exception) {
                 e.printStackTrace()
             }
