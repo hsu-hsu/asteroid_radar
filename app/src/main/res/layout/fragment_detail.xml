@@ -19,6 +19,7 @@
             android:id="@+id/activity_main_image_of_the_day"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:contentDescription="@string/potentially_hazardous_asteroid_image"
             android:adjustViewBounds="true"
             app:asteroidStatusImage="@{asteroid.potentiallyHazardous}"
             app:layout_constraintEnd_toEndOf="parent"
@@ -91,6 +92,7 @@
 
                     <ImageView
                         android:id="@+id/help_button"
+                        android:contentDescription="@string/help_button"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:padding="16dp"

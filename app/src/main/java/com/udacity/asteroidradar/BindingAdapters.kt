@@ -11,8 +11,10 @@ import com.squareup.picasso.Picasso
 fun bindAsteroidStatusImage(imageView: ImageView, isHazardous: Boolean) {
     if (isHazardous) {
         imageView.setImageResource(R.drawable.ic_status_potentially_hazardous)
+        imageView.contentDescription = R.string.potentially_hazardous_asteroid_image.toString()
     } else {
         imageView.setImageResource(R.drawable.ic_status_normal)
+        imageView.contentDescription = R.string.not_hazardous_asteroid_image.toString()
     }
 }
 
@@ -57,6 +59,8 @@ fun bindImagePictureOfDay(imageView: ImageView, data: PictureOfDay?) {
                 R.string.nasa_picture_of_day_content_description_format
             )
             imageView.contentDescription = String.format(strFormat, it.title)
+        } else{
+            imageView.setImageResource(R.drawable.placeholder_picture_of_day)
         }
     }
 }

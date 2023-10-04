@@ -4,11 +4,12 @@ import android.app.Application
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.udacity.asteroidradar.Asteroid
 import com.udacity.asteroidradar.PictureOfDay
+import com.udacity.asteroidradar.api.AsteroidsApiFilter
 import com.udacity.asteroidradar.database.AsteroidsDatabase
 import com.udacity.asteroidradar.repository.AsteroidsRepository
 import kotlinx.coroutines.launch
@@ -18,7 +19,10 @@ class MainViewModel(application: Application): AndroidViewModel(application) {
     private val database = AsteroidsDatabase.getInstance(application)
     private val repository = AsteroidsRepository(database)
 
-    val asteroids = repository.asteroids
+    val weeklyAsteroids = repository.asteroids
+    val todayAsteroids = repository.todayAsteroid
+
+    val asteroids: MediatorLiveData<List<Asteroid>> = MediatorLiveData()
 
     private val _pictureOfDay = MutableLiveData<PictureOfDay>()
     val pictureOfDay: LiveData<PictureOfDay>
@@ -37,7 +41,9 @@ class MainViewModel(application: Application): AndroidViewModel(application) {
         viewModelScope.launch {
             try {
                 repository.refreshAsteroids()
-
+                asteroids.addSource(weeklyAsteroids) {
+                    asteroids.value = it
+                }
             } catch (e: Exception) {
                 e.printStackTrace()
             }
@@ -61,5 +67,23 @@ class MainViewModel(application: Application): AndroidViewModel(application) {
 
     fun onDetailFragmentNavigate() {
         _navigateToDetailFragment.value = null
+    }
+
+    fun updateFilter(filter: AsteroidsApiFilter) {
+        removeSource()
+        if(filter == AsteroidsApiFilter.SHOW_TODAY) {
+            asteroids.addSource(todayAsteroids) {
+                asteroids.value = it
+            }
+        } else{
+            asteroids.addSource(weeklyAsteroids) {
+                asteroids.value = it
+            }
+        }
+    }
+
+    private fun removeSource() {
+        asteroids.removeSource(todayAsteroids)
+        asteroids.removeSource(weeklyAsteroids)
     }
 }

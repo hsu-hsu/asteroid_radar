@@ -3,6 +3,7 @@ package com.udacity.asteroidradar.repository
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.map
 import com.udacity.asteroidradar.Asteroid
+import com.udacity.asteroidradar.Constants
 import com.udacity.asteroidradar.PictureOfDay
 import com.udacity.asteroidradar.api.AsteroidApi
 import com.udacity.asteroidradar.api.asAsteroidEntities
@@ -17,6 +18,9 @@ class AsteroidsRepository(private val database: AsteroidsDatabase) {
         database.dao.getAll().map {
             it.asAsteroids()
         }
+
+    val todayAsteroid: LiveData<List<Asteroid>> =
+        database.dao.getTodayAsteroid(Constants.getCurrentDate())
 
     suspend fun refreshAsteroids() {
         withContext(Dispatchers.IO) {

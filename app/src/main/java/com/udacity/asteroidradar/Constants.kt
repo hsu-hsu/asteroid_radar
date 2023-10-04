@@ -1,5 +1,8 @@
 package com.udacity.asteroidradar
 
+import java.text.SimpleDateFormat
+import java.util.Date
+
 object Constants {
     const val API_QUERY_DATE_FORMAT = "YYYY-MM-dd"
     const val DEFAULT_END_DATE_DAYS = 7
@@ -7,5 +10,10 @@ object Constants {
 
     const val NEO_PATH = "neo/rest/v1/feed"
     const val APOD_PATH = "planetary/apod"
-    const val API_KEY = "uGgIpd2hzyASwPjxHVvbIdRu5Ws9ts3Fy9PiUwKh"
+
+    fun getCurrentDate(): String {
+        val formatter = SimpleDateFormat("yyyy-MM-dd")
+        val date = Date()
+        return formatter.format(date)
+    }
 }
